@@ -33,3 +33,6 @@ def get_db() -> Generator:
         yield db
     finally:
         db.close()
+
+
+from app.db import models
