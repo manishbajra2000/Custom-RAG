@@ -3,6 +3,8 @@ from app.services.llm import LLMService
 from app.services.qdrant import QdrantService
 from app.services.rag import RAGService
 
+from app.schemas.chat import ChatMessage
+
 
 embedding_service = EmbeddingService()
 qdrant_service = QdrantService()
@@ -16,6 +18,8 @@ rag = RAGService(
 
 question = "What are the four houses at Hogwarts?"
 
+history: list[ChatMessage] = []
+
 # query_vector = embedding_service.embed_text(question)
 
 # results = qdrant_service.search(
@@ -27,6 +31,9 @@ question = "What are the four houses at Hogwarts?"
 #     print("\nSCORE:", result.score)
 #     print("TEXT:", result.payload.get("text"))
 
-answer = rag.answer(question)
+answer = rag.answer(
+    question,
+    history,
+)
 
 print(answer)

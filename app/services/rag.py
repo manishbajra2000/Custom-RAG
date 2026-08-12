@@ -2,6 +2,8 @@ from app.services.embeddings import EmbeddingService
 from app.services.llm import LLMService
 from app.services.qdrant import QdrantService
 
+from app.schemas.chat import ChatMessage
+
 
 class RAGService:
     def __init__(
@@ -17,6 +19,7 @@ class RAGService:
     def answer(
         self,
         question: str,
+        history: list[ChatMessage],
     ) -> str:
         query_vector = self.embedding_service.embed_text(question)
 
@@ -30,7 +33,10 @@ class RAGService:
             for result in results
             if result.payload and "text" in result.payload
         )
-
+        conversation = "\n".join(
+            f"{message.role}: {message.content}"
+            for message in history
+        )
         prompt = f"""
 You are a helpful document assistant.
 
@@ -38,6 +44,9 @@ Answer the user's question using only the provided context.
 
 If the answer cannot be found in the context, say:
 "I couldn't find the answer in the provided documents."
+
+Conversation history:
+{conversation}
 
 Context:
 {context}
