@@ -65,3 +65,12 @@ class QdrantService:
             query=query_vector,
             limit=limit,
         ).points
+    
+    def upsert_chunks(
+    self,
+    points: list[PointStruct],
+    ) -> None:
+        self.client.upsert(
+            collection_name=COLLECTION_NAME,
+            points=points,
+        )
