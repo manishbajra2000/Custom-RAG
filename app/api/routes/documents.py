@@ -3,6 +3,10 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from app.core.dependencies import ingestion_service
 from app.schemas.document import ChunkingStrategy
 
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
+from app.db.database import get_db
 
 router = APIRouter(
     prefix="/documents",
@@ -14,12 +18,14 @@ router = APIRouter(
 async def ingest_document(
     file: UploadFile = File(...),
     chunking_strategy: ChunkingStrategy = Form(...),
+    db: Session = Depends(get_db),
 ) -> dict[str, str]:
     try:
         document_id, chunk_count = (
             await ingestion_service.ingest_document(
                 file,
                 chunking_strategy,
+                db,
             )
         )
     except ValueError as exc:
