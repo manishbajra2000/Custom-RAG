@@ -324,17 +324,16 @@ palm-mind-rag/
 │       └── redis.py
 │
 ├── tests/
-│
-├── test_booking.py
-├── test_booking_extractor.py
-├── test_booking_parser.py
-├── test_booking_flow.py
-├── test_booking_intent.py
-├── test_chat_memory.py
-├── test_contextualizer.py
-├── test_llm.py
-├── test_rag.py
-├── test_redis.py
+│   ├── test_booking.py
+│   ├── test_booking_extractor.py
+│   ├── test_booking_parser.py
+│   ├── test_booking_flow.py
+│   ├── test_booking_intent.py
+│   ├── test_chat_memory.py
+│   ├── test_contextualizer.py
+│   ├── test_llm.py
+│   ├── test_rag.py
+│   └── test_redis.py
 │
 ├── docker-compose.yml
 ├── requirements.txt
@@ -741,5 +740,7 @@ Implemented:
 ---
 
 # Author
+
+MANISH HARSHA BAJRACHARYA
 
 Built as part of the Palm Mind AI hiring task.
