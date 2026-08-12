@@ -6,11 +6,15 @@ from app.services.llm import LLMService
 from app.services.qdrant import QdrantService
 from app.services.redis import RedisService
 from app.services.rag import RAGService
+from app.services.query_contextualizer import QueryContextualizer
 
 
 embedding_service = EmbeddingService()
 qdrant_service = QdrantService()
 llm_service = LLMService()
+query_contextualizer = QueryContextualizer(
+    llm_service=llm_service,
+)
 redis_service = RedisService()
 
 qdrant_service.create_collection()
@@ -26,6 +30,7 @@ rag_service = RAGService(
     embedding_service=embedding_service,
     qdrant_service=qdrant_service,
     llm_service=llm_service,
+    query_contextualizer=query_contextualizer,
 )
 
 chat_service = ChatService(

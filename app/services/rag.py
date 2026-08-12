@@ -4,6 +4,8 @@ from app.services.qdrant import QdrantService
 
 from app.schemas.chat import ChatMessage
 
+from app.services.query_contextualizer import QueryContextualizer
+
 
 class RAGService:
     def __init__(
@@ -11,17 +13,26 @@ class RAGService:
         embedding_service: EmbeddingService,
         qdrant_service: QdrantService,
         llm_service: LLMService,
+        query_contextualizer: QueryContextualizer,
     ) -> None:
         self.embedding_service = embedding_service
         self.qdrant_service = qdrant_service
         self.llm_service = llm_service
+        self.query_contextualizer = query_contextualizer
 
     def answer(
         self,
         question: str,
         history: list[ChatMessage],
     ) -> str:
-        query_vector = self.embedding_service.embed_text(question)
+        standalone_question = self.query_contextualizer.contextualize(
+            question=question,
+            history=history,
+        )
+
+        query_vector = self.embedding_service.embed_text(
+            standalone_question
+        )
 
         results = self.qdrant_service.search(
             query_vector,
@@ -51,8 +62,11 @@ Conversation history:
 Context:
 {context}
 
-Question:
+Current question:
 {question}
+
+Standalone question used for retrieval:
+{standalone_question}
 
 Answer:
 """
