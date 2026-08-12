@@ -3,6 +3,8 @@ import json
 from app.schemas.chat import ChatMessage
 from app.services.redis import RedisService
 
+from typing import Any
+
 
 class ChatMemoryService:
     def __init__(
@@ -55,3 +57,39 @@ class ChatMemoryService:
         key = f"chat:session:{session_id}"
 
         self.redis_service.client.delete(key)
+
+    def get_booking_state(
+        self,
+        session_id: str,
+    ) -> dict[str, Any]:
+        key = f"booking:session:{session_id}"
+
+        data = self.redis_service.get(key)
+
+        if data is None:
+            return {}
+
+        return json.loads(data)
+
+
+    def save_booking_state(
+        self,
+        session_id: str,
+        state: dict[str, Any],
+    ) -> None:
+        key = f"booking:session:{session_id}"
+
+        self.redis_service.set(
+            key,
+            json.dumps(state),
+        )
+
+    def clear_booking_state(
+        self,
+        session_id: str,
+    ) -> None:
+        key = f"booking:session:{session_id}"
+
+        self.redis_service.delete(key)
+
+        

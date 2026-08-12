@@ -1,3 +1,6 @@
+from app.services.booking import BookingService
+from app.services.booking_extractor import BookingExtractor
+from app.services.booking_parser import BookingParser
 from app.services.chat import ChatService
 from app.services.chat_memory import ChatMemoryService
 from app.services.embeddings import EmbeddingService
@@ -10,11 +13,23 @@ from app.services.query_contextualizer import QueryContextualizer
 
 
 embedding_service = EmbeddingService()
+
 qdrant_service = QdrantService()
+
 llm_service = LLMService()
+
 query_contextualizer = QueryContextualizer(
     llm_service=llm_service,
 )
+
+booking_service = BookingService()
+
+booking_extractor = BookingExtractor(
+    llm_service=llm_service,
+)
+
+booking_parser = BookingParser()
+
 redis_service = RedisService()
 
 qdrant_service.create_collection()
@@ -24,7 +39,9 @@ ingestion_service = IngestionService(
     qdrant_service=qdrant_service,
 )
 
-memory_service = ChatMemoryService(redis_service)
+memory_service = ChatMemoryService(
+    redis_service
+)
 
 rag_service = RAGService(
     embedding_service=embedding_service,
@@ -36,6 +53,9 @@ rag_service = RAGService(
 chat_service = ChatService(
     memory_service=memory_service,
     rag_service=rag_service,
+    booking_service=booking_service,
+    booking_extractor=booking_extractor,
+    booking_parser=booking_parser,
 )
 
 
