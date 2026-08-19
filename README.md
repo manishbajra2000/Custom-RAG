@@ -1,4 +1,4 @@
-# Palm Mind — RAG Backend
+# RAG Backend
 
 A production-style backend for document ingestion and conversational RAG, built with FastAPI.
 
