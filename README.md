@@ -743,4 +743,3 @@ Implemented:
 
 MANISH HARSHA BAJRACHARYA
 
-Built as part of the Palm Mind AI hiring task.
